@@ -10,11 +10,11 @@ _estack = ORIGIN(RAM) + LENGTH(RAM);
 
 SECTIONS
 {
-	/* 
-     * .text section:
-     * - Contains the executable code and read-only data
-     * - Placed in FLASH memory
-     */
+	/*
+	 * .text section:
+	 * - Contains the executable code and read-only data
+	 * - Placed in FLASH memory
+	 */
 	.text :
 	{
 		KEEP(*(.isr_vector));

@@ -15,7 +15,7 @@ PRJ_NAME := stm32f103rb_platform
 CMSIS_DEVICE_INC_DIR = third_party/cmsis_device_f1/Include/
 
 # Startup script from CMSIS
-STARTUP_SCRIPT = third_party/cmsis_device_f1/Source/Templates/system_stm32f1xx.c
+SYSTEM_FILE = third_party/cmsis_device_f1/Source/Templates/system_stm32f1xx.c
 
 # CMSIS with:
 # - core_cm3.h	Cortex-M3 Core Peripheral Access Layer Header File
@@ -106,10 +106,9 @@ LDFLAGS := \
 #                                 Source Files                                 #
 # ---------------------------------------------------------------------------- #
 
-
 # Find all C and Assembly source files in the SRC_DIR
 C_SOURCES := $(wildcard $(SRC_DIR)/*.c)
-C_SOURCES += $(STARTUP_SCRIPT)
+C_SOURCES += $(SYSTEM_FILE)
 
 S_SOURCES := $(wildcard $(ASM_DIR)/*.s)
 SOURCES := $(C_SOURCES) $(S_SOURCES)

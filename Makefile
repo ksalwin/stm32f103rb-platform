@@ -12,10 +12,14 @@ PRJ_NAME := stm32f103rb_platform
 # CMSIS for STM32F1 with:
 # - stm32f103xb.h		register definitions and peripheral constants
 # - system_stm32f1xx.h	system header file
-CMSIS_DEVICE_INC_DIR = third_party/cmsis_device_f1/Include/
+CMSIS_DEVICE_INC_DIR := third_party/cmsis_device_f1/Include/
+
+# System file from CMSIS
+SYSTEM_FILE := third_party/cmsis_device_f1/Source/Templates/system_stm32f1xx.c
 
 # Startup script from CMSIS
-SYSTEM_FILE = third_party/cmsis_device_f1/Source/Templates/system_stm32f1xx.c
+STARTUP_SCRIPT := \
+	third_party/cmsis_device_f1/Source/Templates/gcc/startup_stm32f103xb.s
 
 # CMSIS with:
 # - core_cm3.h	Cortex-M3 Core Peripheral Access Layer Header File
@@ -106,11 +110,14 @@ LDFLAGS := \
 #                                 Source Files                                 #
 # ---------------------------------------------------------------------------- #
 
-# Find all C and Assembly source files in the SRC_DIR
+# List of all C source files
 C_SOURCES := $(wildcard $(SRC_DIR)/*.c)
 C_SOURCES += $(SYSTEM_FILE)
 
+# List of all assembly source files
 S_SOURCES := $(wildcard $(ASM_DIR)/*.s)
+S_SOURCES += $(STARTUP_SCRIPT)
+
 SOURCES := $(C_SOURCES) $(S_SOURCES)
 
 # Convert source file paths to object file paths
@@ -122,7 +129,7 @@ OBJECTS = \
 #                                Build Rules                                   #
 # ---------------------------------------------------------------------------- #
 
-# Rule to link all object files into the final ELF executable
+# Rule to build and link all files into the final ELF executable
 all: build
 
 build: $(OBJECTS) | $(BIN_DIR)

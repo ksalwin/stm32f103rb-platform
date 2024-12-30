@@ -30,7 +30,6 @@ CMSIS_INC_DIR = third_party/CMSIS_6/CMSIS/Core/Include
 #                                  Directories                                 #
 # ---------------------------------------------------------------------------- #
 
-# Project include, source, object and binary directories
 INC_DIR := \
 	inc \
 	$(CMSIS_INC_DIR) \
@@ -39,8 +38,25 @@ INC_DIR := \
 SRC_DIR := src
 ASM_DIR := src
 
-OBJ_DIR := build/obj
 BIN_DIR := build/
+OBJ_DIR := build/obj
+
+# ---------------------------------------------------------------------------- #
+#                                 Source Files                                 #
+# ---------------------------------------------------------------------------- #
+
+# List of all C source files
+C_SRC := $(wildcard $(SRC_DIR)/*.c)
+C_SRC += $(SYSTEM_FILE)
+
+# List of all assembly source files
+S_SRC := $(wildcard $(ASM_DIR)/*.s)
+S_SRC += $(STARTUP_SCRIPT)
+
+# Convert source file paths to object file paths
+OBJECTS = \
+	$(patsubst $(SRC_DIR)/%.c,$(OBJ_DIR)/%.o,$(C_SRC)) \
+	$(patsubst $(SRC_DIR)/%.s,$(OBJ_DIR)/%.o,$(S_SRC))
 
 # ---------------------------------------------------------------------------- #
 #                                   Targets                                    #
@@ -107,25 +123,6 @@ LDFLAGS := \
 	-T $(LD_FILE)
 
 # ---------------------------------------------------------------------------- #
-#                                 Source Files                                 #
-# ---------------------------------------------------------------------------- #
-
-# List of all C source files
-C_SOURCES := $(wildcard $(SRC_DIR)/*.c)
-C_SOURCES += $(SYSTEM_FILE)
-
-# List of all assembly source files
-S_SOURCES := $(wildcard $(ASM_DIR)/*.s)
-S_SOURCES += $(STARTUP_SCRIPT)
-
-SOURCES := $(C_SOURCES) $(S_SOURCES)
-
-# Convert source file paths to object file paths
-OBJECTS = \
-	$(patsubst $(SRC_DIR)/%.c,$(OBJ_DIR)/%.o,$(C_SOURCES)) \
-	$(patsubst $(SRC_DIR)/%.s,$(OBJ_DIR)/%.o,$(S_SOURCES))
-
-# ---------------------------------------------------------------------------- #
 #                                Build Rules                                   #
 # ---------------------------------------------------------------------------- #
 
@@ -163,7 +160,7 @@ clean:
 # ---------------------------------------------------------------------------- #
 
 # Program MCU with built software
-program flash:
+flash program:
 	openocd \
 	-f interface/stlink.cfg \
 	-f target/stm32f1x.cfg \

@@ -5,12 +5,12 @@
 # Project name
 PRJ_NAME := stm32f103rb_platform
 
-# Third-Party resources directory
-THIRD_PARTY_DIR := third_party
-
 # ---------------------------------------------------------------------------- #
 #                       References to Third-Party resources                    #
 # ---------------------------------------------------------------------------- #
+
+# Third-Party resources directory
+THIRD_PARTY_DIR := third_party
 
 # CMSIS for STM32F1 with:
 # - stm32f103xb.h		register definitions and peripheral constants
@@ -42,10 +42,10 @@ INC_DIR := \
 SRC_DIR := src
 ASM_DIR := src
 
-BIN_DIR := build
+BIN_DIR := build/
 OBJ_DIR := build/obj
 
-vpath %.c $(SRC_DIR) $(CMSIS_DEVICE_SRC_DIR)
+vpath %.c $(SRC_DIR) $(CMSIS_DEVICE_F1_SRC_DIR)
 
 # ---------------------------------------------------------------------------- #
 #                                 Source Files                                 #
@@ -53,19 +53,16 @@ vpath %.c $(SRC_DIR) $(CMSIS_DEVICE_SRC_DIR)
 
 # List of all C source files
 C_SRC := $(wildcard $(SRC_DIR)/*.c)
-C_SRC += $(SYSTEM_FILE)
+C_SRC += $(CMSIS_DEVICE_SRC)
 
 # List of all assembly source files
 S_SRC := $(wildcard $(ASM_DIR)/*.s)
 S_SRC += $(STARTUP_SCRIPT)
 
 # Convert source file paths to object file paths
-# TODO: startup file and system not put into object dir
 OBJECTS = \
 	$(patsubst %.c, $(OBJ_DIR)/%.o, $(notdir $(C_SRC))) \
-	$(patsubst $(SRC_DIR)/%.s, $(OBJ_DIR)/%.o, $(S_SRC))
-
-$(info List of object files: $(OBJECTS))
+	$(patsubst $(SRC_DIR)/%.s,$(OBJ_DIR)/%.o,$(S_SRC))
 
 # ---------------------------------------------------------------------------- #
 #                                   Targets                                    #
@@ -152,7 +149,7 @@ $(OBJ_DIR)/%.o: %.c | $(OBJ_DIR)
 	@echo "Done"
 
 # Rule to assemble Assembly source files to object files
-$(OBJ_DIR)/%.o: %.s | $(OBJ_DIR)
+$(OBJ_DIR)/%.o: $(SRC_DIR)/%.s | $(OBJ_DIR)
 	$(AS) $(ASFLAGS) $< -o $@
 
 # ---------------------------------------------------------------------------- #

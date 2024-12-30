@@ -54,10 +54,12 @@ S_SRC := $(wildcard $(ASM_DIR)/*.s)
 S_SRC += $(STARTUP_SCRIPT)
 
 # Convert source file paths to object file paths
+# TODO: startup file and system not put into object dir
 OBJECTS = \
-	$(patsubst $(SRC_DIR)/%.c,$(OBJ_DIR)/%.o,$(C_SRC)) \
+	$(patsubst %.c, $(OBJ_DIR)/%.o, $(notdir $(C_SRC))) \
 	$(patsubst $(SRC_DIR)/%.s,$(OBJ_DIR)/%.o,$(S_SRC))
 
+$(info $(OBJECTS))
 # ---------------------------------------------------------------------------- #
 #                                   Targets                                    #
 # ---------------------------------------------------------------------------- #
@@ -67,6 +69,11 @@ TARGET = $(BIN_DIR)/$(PRJ_NAME)
 # ---------------------------------------------------------------------------- #
 # Toolchain: Compiler                                                          #
 # ---------------------------------------------------------------------------- #
+
+# MCU definition
+# -mcpu=cortex-m3	: Specify the target CPU architecture
+# -mthumb			: Generate Thumb instruction set
+MCU := -mcpu=cortex-m3 -mthumb
 
 # Compiler
 CC := arm-none-eabi-gcc
@@ -82,7 +89,7 @@ CC := arm-none-eabi-gcc
 # -fno-unwind-tables: Disables generation of unwind tables used by
 #  exception-handling and debugging features
 CFLAGS := \
-	-mcpu=cortex-m3 -mthumb \
+	$(MCU) \
 	-O0 \
 	-Wall \
 	-g \
@@ -99,11 +106,9 @@ CFLAGS := \
 AS := arm-none-eabi-as	# Assembler
 
 # Assembler flags:
-# -mcpu=cortex-m3	: Specify the target CPU architecture
-# -mthumb			: Generate Thumb instruction set
 # -g				: Include debugging information
 ASFLAGS := \
-	-mcpu=cortex-m3 -mthumb \
+	$(MCU) \
 	-g
 
 # ---------------------------------------------------------------------------- #
@@ -116,10 +121,8 @@ LD := arm-none-eabi-gcc
 # Linker file
 LD_FILE := $(PRJ_NAME).ld
 
-# Linker flags:
-# -mcpu=cortex-m3	: Specify the target CPU architecture
 LDFLAGS := \
-	-mcpu=cortex-m3 -mthumb \
+	$(MCU) \
 	-T $(LD_FILE)
 
 # ---------------------------------------------------------------------------- #
@@ -153,7 +156,9 @@ $(OBJ_DIR):
 	mkdir -p $(OBJ_DIR)
 
 clean:
-	rm -r $(BIN_DIR)
+	@echo "Executing rule: $@ - removing $(BIN_DIR) dir."
+	@rm -rf $(BIN_DIR)
+	@echo "Done"
 
 # ---------------------------------------------------------------------------- #
 #                           Target MCU Rules                                   #

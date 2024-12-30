@@ -139,18 +139,19 @@ all: build
 
 # Rule to build and link all files into the final ELF executable
 build: $(OBJECTS) | $(BIN_DIR)
-	$(LD) $(CFLAGS) $(LDFLAGS) $^ -o $(TARGET).elf
+	@$(LD) $(CFLAGS) $(LDFLAGS) $^ -o $(TARGET).elf
 
 # Rule to compile C source files to object files
 $(OBJ_DIR)/%.o: %.c | $(OBJ_DIR)
-	@echo "Compiling: $@"
-	@echo " - Dependency: $<"
+	@echo "Compiling: $<"
 	@$(CC) $(CFLAGS) -c $< -o $@
-	@echo "Done"
+	@echo " - Done"
 
 # Rule to assemble Assembly source files to object files
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.s | $(OBJ_DIR)
+	@echo "Assembling: $<" 
 	$(AS) $(ASFLAGS) $< -o $@
+	@echo " - Done"
 
 # ---------------------------------------------------------------------------- #
 #                              Directory Creation                              #

@@ -160,9 +160,9 @@ $(OBJ_DIR)/%.o: %.c | $(OBJ_DIR)
 
 # Rule to assemble Assembly source files to object files
 $(OBJ_DIR)/%.o: %.s | $(OBJ_DIR)
-	@echo "Assembling: $<" 
+	@echo -n "Assembling: $<" 
 	$(AS) $(ASFLAGS) $< -o $@
-	@echo " - Done"
+	@echo -e "\t[ok]"
 
 # ---------------------------------------------------------------------------- #
 #                              Directory Creation                              #

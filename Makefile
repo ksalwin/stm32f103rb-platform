@@ -5,22 +5,21 @@
 # Project name
 PRJ_NAME := stm32f103rb_platform
 
+# Third-Party resources directory
+THIRD_PARTY_DIR := third_party
+
 # ---------------------------------------------------------------------------- #
 #                       References to Third-Party resources                    #
 # ---------------------------------------------------------------------------- #
 
-
-
 # CMSIS for STM32F1 with:
 # - stm32f103xb.h		register definitions and peripheral constants
 # - system_stm32f1xx.h	system header file
-CMSIS_DEVICE_INC_DIR := third_party/cmsis_device_f1/Include
-
-CMSIS_DEVICE_SRC_DIR := third_party/cmsis_device_f1/Source/Templates
-
+CMSIS_DEVICE_F1_INC_DIR := $(THIRD_PARTY_DIR)/cmsis_device_f1/Include
+CMSIS_DEVICE_F1_SRC_DIR := $(THIRD_PARTY_DIR)/cmsis_device_f1/Source/Templates
 
 # System file from CMSIS
-SYSTEM_FILE := third_party/cmsis_device_f1/Source/Templates/system_stm32f1xx.c
+CMSIS_DEVICE_SRC += system_stm32f1xx.c
 
 # Startup script from CMSIS
 STARTUP_SCRIPT := \
@@ -37,8 +36,8 @@ CMSIS_INC_DIR = third_party/CMSIS_6/CMSIS/Core/Include
 
 INC_DIR := \
 	inc \
-	$(CMSIS_INC_DIR) \
-	$(CMSIS_DEVICE_INC_DIR)
+	$(CMSIS_DEVICE_F1_INC_DIR) \
+	$(CMSIS_INC_DIR)
 
 SRC_DIR := src
 ASM_DIR := src
@@ -153,7 +152,7 @@ $(OBJ_DIR)/%.o: %.c | $(OBJ_DIR)
 	@echo "Done"
 
 # Rule to assemble Assembly source files to object files
-$(OBJ_DIR)/%.o: $(SRC_DIR)/%.s | $(OBJ_DIR)
+$(OBJ_DIR)/%.o: %.s | $(OBJ_DIR)
 	$(AS) $(ASFLAGS) $< -o $@
 
 # ---------------------------------------------------------------------------- #

@@ -42,7 +42,6 @@ INC_DIR := \
 	$(THIRD_PARTY_INC_DIR)
 
 SRC_DIR := src
-ASM_DIR := src
 
 BIN_DIR := build/
 OBJ_DIR := build/obj
@@ -59,9 +58,6 @@ C_SRC := \
 	$(wildcard $(SRC_DIR)/*.c) \
 	$(THIRD_PARTY_SRC)
 #$(info $(C_SRC))
-
-# List of all assembly source files
-S_SRC := startup_stm32f103xb.s 
 
 # Convert source file paths to object file paths
 OBJECTS = \

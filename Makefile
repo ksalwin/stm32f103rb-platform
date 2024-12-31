@@ -151,7 +151,7 @@ build: $(OBJECTS) | $(BIN_DIR)
 
 # Rule to compile C source files to object files
 $(OBJ_DIR)/%.o: %.c | $(OBJ_DIR)
-	@echo -n "Compiling: $<"
+	@echo -n "Compiling:  $<"
 	@$(CC) $(CFLAGS) -c $< -o $@
 	@echo -e "\t[ok]"
 
@@ -164,6 +164,8 @@ $(OBJ_DIR)/%.o: %.s | $(OBJ_DIR)
 # ---------------------------------------------------------------------------- #
 #                              Directory Creation                              #
 # ---------------------------------------------------------------------------- #
+
+.PHONY: $(BIN_DIR) $(OBJ_DIR)
 
 # Ensure the binary directory exists
 $(BIN_DIR):

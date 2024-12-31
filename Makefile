@@ -13,30 +13,24 @@ PRJ_NAME := stm32f103rb_platform
 THIRD_PARTY_DIR := third_party
 
 
-
 # CMSIS for STM32F1 directory with:
 # - stm32f103xb.h		register definitions and peripheral constants
 # - system_stm32f1xx.h	system header file
 THIRD_PARTY_INC_DIR += $(THIRD_PARTY_DIR)/cmsis_device_f1/Include
 
 # CMSIS for STM32F1 directory with source files
-THIRD_PARTY_SRC_DIR += $(THIRD_PARTY_DIR)/cmsis_device_f1/Source/Templates
-# Source files:
 # - system_stm32f1xx.c	system source file
+THIRD_PARTY_SRC_DIR += $(THIRD_PARTY_DIR)/cmsis_device_f1/Source/Templates
 THIRD_PARTY_SRC		+= system_stm32f1xx.c
-
+# - startup_stm32f103xb.s	startup script
+THIRD_PARTY_SRC_DIR += $(THIRD_PARTY_DIR)/cmsis_device_f1/Source/Templates/gcc
+THIRD_PARTY_SRC		+= startup_stm32f103xb.s 
 
 
 # CMSIS directory with:
 # - core_cm3.h	Cortex-M3 Core Peripheral Access Layer Header File
 #   			Required by stm32f103xb.h
 THIRD_PARTY_INC_DIR += $(THIRD_PARTY_DIR)/CMSIS_6/CMSIS/Core/Include
-
-# CMSIS directory with source files
-THIRD_PARTY_SRC_DIR += $(THIRD_PARTY_DIR)/cmsis_device_f1/Source/Templates/gcc
-# Source files:
-# - startup_stm32f103xb.s	startup script
-#THIRD_PARTY_SRC		+= startup_stm32f103xb.s
 
 # ---------------------------------------------------------------------------- #
 #                                  Directories                                 #
@@ -54,6 +48,7 @@ BIN_DIR := build/
 OBJ_DIR := build/obj
 
 vpath %.c $(SRC_DIR) $(THIRD_PARTY_SRC_DIR)
+vpath %.s $(THIRD_PARTY_SRC_DIR)
 
 # ---------------------------------------------------------------------------- #
 #                                 Source Files                                 #
@@ -63,17 +58,19 @@ vpath %.c $(SRC_DIR) $(THIRD_PARTY_SRC_DIR)
 C_SRC := \
 	$(wildcard $(SRC_DIR)/*.c) \
 	$(THIRD_PARTY_SRC)
-
-$(info $(C_SRC))
+#$(info $(C_SRC))
 
 # List of all assembly source files
-S_SRC := $(wildcard $(ASM_DIR)/*.s)
-S_SRC += $(STARTUP_SCRIPT)
+S_SRC := startup_stm32f103xb.s 
 
 # Convert source file paths to object file paths
 OBJECTS = \
-	$(patsubst %.c, $(OBJ_DIR)/%.o, $(notdir $(C_SRC))) \
-	$(patsubst %.s, $(OBJ_DIR)/%.o, $(notdir $(S_SRC)))
+	$(addprefix $(OBJ_DIR)/,$(addsuffix .o,$(basename $(notdir $(C_SRC)))))
+#	$(patsubst %.c, $(OBJ_DIR)/%.o, $(notdir $(C_SRC))) \
+#	$(patsubst %.s, $(OBJ_DIR)/%.o, $(notdir $(S_SRC)))
+
+$(info Obj $(OBJECTS))
+$(info SRC $(C_SRC))
 
 # ---------------------------------------------------------------------------- #
 #                                   Targets                                    #
@@ -161,7 +158,7 @@ $(OBJ_DIR)/%.o: %.c | $(OBJ_DIR)
 # Rule to assemble Assembly source files to object files
 $(OBJ_DIR)/%.o: %.s | $(OBJ_DIR)
 	@echo -n "Assembling: $<" 
-	$(AS) $(ASFLAGS) $< -o $@
+	@$(AS) $(ASFLAGS) $< -o $@
 	@echo -e "\t[ok]"
 
 # ---------------------------------------------------------------------------- #

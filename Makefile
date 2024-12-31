@@ -66,11 +66,9 @@ S_SRC := startup_stm32f103xb.s
 # Convert source file paths to object file paths
 OBJECTS = \
 	$(addprefix $(OBJ_DIR)/,$(addsuffix .o,$(basename $(notdir $(C_SRC)))))
-#	$(patsubst %.c, $(OBJ_DIR)/%.o, $(notdir $(C_SRC))) \
-#	$(patsubst %.s, $(OBJ_DIR)/%.o, $(notdir $(S_SRC)))
 
-$(info Obj $(OBJECTS))
-$(info SRC $(C_SRC))
+#$(info Obj $(OBJECTS))
+#$(info SRC $(C_SRC))
 
 # ---------------------------------------------------------------------------- #
 #                                   Targets                                    #
@@ -147,7 +145,9 @@ all: build
 
 # Rule to build and link all files into the final ELF executable
 build: $(OBJECTS) | $(BIN_DIR)
+	@echo -n "Building:   $(TARGET).elf"
 	@$(LD) $(CFLAGS) $(LDFLAGS) $^ -o $(TARGET).elf
+	@echo -e "\t[ok]"
 
 # Rule to compile C source files to object files
 $(OBJ_DIR)/%.o: %.c | $(OBJ_DIR)

@@ -2,8 +2,9 @@
 #                                  Makefile                                    #
 # **************************************************************************** #
 
-# Project name
 PRJ_NAME := stm32f103rb_platform
+
+DEVICE := STM32F103xB
 
 # ---------------------------------------------------------------------------- #
 #                       References to Third-Party resources                    #
@@ -107,7 +108,7 @@ CFLAGS := \
 	-Wall \
 	-g \
 	$(addprefix -I, $(INC_DIR)) \
-	-DSTM32F103xB \
+	-D$(DEVICE) \
 	-fno-exceptions \
 	-fno-unwind-tables
 

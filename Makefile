@@ -36,41 +36,48 @@ THIRD_PARTY_INC_DIR += $(THIRD_PARTY_DIR)/CMSIS_6/CMSIS/Core/Include
 #                                  Directories                                 #
 # ---------------------------------------------------------------------------- #
 
-# Directories with header files
-INC_DIR := \
-	inc \
+# Project root source directores (excluding third-party source directories)
+PRJ_ROOT_SRC_DIR += \
+	main \
+	mcal \
+	os
+
+INC_DIR += \
+	$(shell find $(PRJ_ROOT_SRC_DIR) -type d) \
 	$(THIRD_PARTY_INC_DIR)
+$(info Include dirs: $(INC_DIR))
 
-SRC_DIR := src
+PRJ_SRC_DIR := $(shell find $(PRJ_ROOT_SRC_DIR) -type d)
+$(info Project all source dirs: $(PRJ_SRC_DIR))
 
-BIN_DIR := build/
-OBJ_DIR := build/obj
+vpath %.c $(PRJ_SRC_DIR) $(THIRD_PARTY_SRC_DIR)
+vpath %.s $(PRJ_SRC_DIR) $(THIRD_PARTY_SRC_DIR)
 
-vpath %.c $(SRC_DIR) $(THIRD_PARTY_SRC_DIR)
-vpath %.s $(THIRD_PARTY_SRC_DIR)
+
+BIN_DIR := gen_build
+OBJ_DIR := $(BIN_DIR)/obj
 
 # ---------------------------------------------------------------------------- #
 #                                 Source Files                                 #
 # ---------------------------------------------------------------------------- #
 
 # List of all C source files
-C_SRC := \
-	$(wildcard $(SRC_DIR)/*.c) \
+SRC := \
+	$(shell find $(PRJ_ROOT_SRC_DIR) -type f -name "*.c") \
 	$(THIRD_PARTY_SRC)
-#$(info $(C_SRC))
+$(info Source files: $(SRC))
 
 # Convert source file paths to object file paths
 OBJECTS = \
-	$(addprefix $(OBJ_DIR)/,$(addsuffix .o,$(basename $(notdir $(C_SRC)))))
+	$(addprefix $(OBJ_DIR)/,$(addsuffix .o,$(basename $(notdir $(SRC)))))
 
 #$(info Obj $(OBJECTS))
-#$(info SRC $(C_SRC))
 
 # ---------------------------------------------------------------------------- #
 #                                   Targets                                    #
 # ---------------------------------------------------------------------------- #
 
-TARGET = $(BIN_DIR)/$(PRJ_NAME)
+TARGET := $(PRJ_NAME)
 
 # ---------------------------------------------------------------------------- #
 # Toolchain: Compiler                                                          #
@@ -141,8 +148,8 @@ all: build
 
 # Rule to build and link all files into the final ELF executable
 build: $(OBJECTS) | $(BIN_DIR)
-	@echo -n "Building:   $(TARGET).elf"
-	@$(LD) $(CFLAGS) $(LDFLAGS) $^ -o $(TARGET).elf
+	@echo -n "Building:   $(BIN_DIR)/$(TARGET).elf"
+	@$(LD) $(CFLAGS) $(LDFLAGS) $^ -o $(BIN_DIR)/$(TARGET).elf
 	@echo -e "\t[ok]"
 
 # Rule to compile C source files to object files
@@ -194,4 +201,4 @@ flash program:
 	openocd \
 	-f interface/stlink.cfg \
 	-f target/stm32f1x.cfg \
-	-c "program build/stm32f103rb_platform.elf verify reset exit"
+	-c "program $(BIN_DIR)/$(TARGET).elf verify reset exit"

@@ -29,7 +29,7 @@ void delay_ms(uint32_t ms) {
     // A basic delay loop. Adjust the loop count for your clock speed.
     volatile uint32_t count;
     for (uint32_t i = 0; i < ms; i++) {
-        count = 2200; // Assuming a 72 MHz system clock
+        count = 1000; // Assuming a 72 MHz system clock
         while (count--) {
             __NOP(); // Prevent optimization
         }

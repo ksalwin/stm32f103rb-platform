@@ -1,6 +1,7 @@
 #ifndef MCU_H
 #define MCU_H
 
-void SysTick_Init(void);
+void mcu_clock_init(void);
+void mcu_systick_init(void);
 
 #endif

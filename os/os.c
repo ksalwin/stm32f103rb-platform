@@ -1,6 +1,6 @@
 #include "os.h"
 #include "mcu.h"
 
-void OS_Init(void) {
-	SysTick_Init();
+void os_init(void) {
+	mcu_systick_init();
 }

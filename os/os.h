@@ -1,6 +1,6 @@
 #ifndef OS_H
 #define OS_H
 
-void OS_Init(void);
+void os_init(void);
 
 #endif

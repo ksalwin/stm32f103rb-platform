@@ -1,9 +1,12 @@
 #include "stm32f1xx.h"
+#include "os.h"
 
 void delay_ms(uint32_t ms);
 void init_LED(void);
 
 int main(void) {
+	os_init();
+
     init_LED();
 
     while (1) {

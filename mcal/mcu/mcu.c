@@ -2,5 +2,9 @@
 #include "mcu_cfg.h"
 #include "stm32f1xx.h"
 
-void SysTick_Init(void) {
+void mcu_clock_init(void) {
+	RCC->CR = RCC_CR_HSION;
+}
+
+void mcu_systick_init(void) {
 }

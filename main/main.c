@@ -1,10 +1,12 @@
 #include "stm32f1xx.h"
 #include "os.h"
+#include "mcu.h"
 
 void delay_ms(uint32_t ms);
 void init_LED(void);
 
 int main(void) {
+	mcu_clock_init();
 	os_init();
 
     init_LED();

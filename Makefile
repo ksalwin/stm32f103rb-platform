@@ -46,10 +46,10 @@ PRJ_ROOT_SRC_DIR += \
 INC_DIR += \
 	$(shell find $(PRJ_ROOT_SRC_DIR) -type d) \
 	$(THIRD_PARTY_INC_DIR)
-$(info Include dirs: $(INC_DIR))
+#$(info Include dirs: $(INC_DIR))
 
 PRJ_SRC_DIR := $(shell find $(PRJ_ROOT_SRC_DIR) -type d)
-$(info Project all source dirs: $(PRJ_SRC_DIR))
+#$(info Project all source dirs: $(PRJ_SRC_DIR))
 
 vpath %.c $(PRJ_SRC_DIR) $(THIRD_PARTY_SRC_DIR)
 vpath %.s $(PRJ_SRC_DIR) $(THIRD_PARTY_SRC_DIR)
@@ -66,7 +66,7 @@ OBJ_DIR := $(BIN_DIR)/obj
 SRC := \
 	$(shell find $(PRJ_ROOT_SRC_DIR) -type f -name "*.c") \
 	$(THIRD_PARTY_SRC)
-$(info Source files: $(SRC))
+#$(info Source files: $(SRC))
 
 # Convert source file paths to object file paths
 OBJECTS = \
@@ -79,6 +79,9 @@ OBJECTS = \
 # ---------------------------------------------------------------------------- #
 
 TARGET := $(PRJ_NAME)
+
+MAP_FILE := $(BIN_DIR)/$(TARGET).map
+ELF_FILE := $(BIN_DIR)/$(TARGET).elf
 
 # ---------------------------------------------------------------------------- #
 # Toolchain: Compiler                                                          #
@@ -132,10 +135,7 @@ ASFLAGS := \
 # Linker (using GCC for linking)
 LD := arm-none-eabi-gcc
 
-# Linker file
 LD_FILE := $(PRJ_NAME).ld
-
-MAP_FILE = $(BIN_DIR)/$(TARGET).map
 
 # -Map					: Generate map file
 # --print-memory-usage	: Print memory usage to console and map file
@@ -156,9 +156,9 @@ all: build
 # Rule to build and link all files into the final ELF executable
 build: $(OBJECTS) | $(BIN_DIR)
 	@echo
-	@echo -n "Building:   $(BIN_DIR)/$(TARGET).elf"
+	@echo -n "Building:   $(ELF_FILE)"
 	@echo
-	@$(LD) $(CFLAGS) $(LDFLAGS) $^ -o $(BIN_DIR)/$(TARGET).elf
+	@$(LD) $(CFLAGS) $(LDFLAGS) $^ -o $(ELF_FILE)
 	@echo -e "\t[ok]"
 
 # Rule to compile C source files to object files
@@ -210,4 +210,4 @@ flash program:
 	openocd \
 	-f interface/stlink.cfg \
 	-f target/stm32f1x.cfg \
-	-c "program $(BIN_DIR)/$(TARGET).elf verify reset exit"
+	-c "program $(ELF_FILE) verify reset exit"

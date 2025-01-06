@@ -10,18 +10,8 @@ int main(void) {
 	os_init();
 
     init_LED();
-	while(1)
-	{
-		__NOP();
-	}
 
-    while (1) {
-        GPIOA->BSRR = GPIO_BSRR_BS5; // Turn on LED (set PA5 high)
-        delay_ms(500);
-
-        GPIOA->BSRR = GPIO_BSRR_BR5; // Turn off LED (set PA5 low)
-        delay_ms(500);
-    }
+	while(1);
 }
 
 void init_LED(void) {
@@ -32,15 +22,4 @@ void init_LED(void) {
     GPIOA->CRL &= ~(GPIO_CRL_CNF5); // Clear CNF5 (set to 00: General purpose output push-pull)
     GPIOA->CRL |= GPIO_CRL_MODE5_1; // Set MODE5 to 10 (output mode, max speed 2 MHz)
     GPIOA->CRL &= ~GPIO_CRL_MODE5_0;
-}
-
-void delay_ms(uint32_t ms) {
-    // A basic delay loop. Adjust the loop count for your clock speed.
-    volatile uint32_t count;
-    for (uint32_t i = 0; i < ms; i++) {
-        count = 1000; // Assuming a 72 MHz system clock
-        while (count--) {
-            __NOP(); // Prevent optimization
-        }
-    }
 }

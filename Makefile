@@ -137,10 +137,13 @@ LD_FILE := $(PRJ_NAME).ld
 
 MAP_FILE = $(BIN_DIR)/$(TARGET).map
 
+# -Map					: Generate map file
+# --print-memory-usage	: Print memory usage to map file
 LDFLAGS := \
 	$(MCU) \
 	-T $(LD_FILE) \
-	-Wl,-Map=$(MAP_FILE)
+	-Wl,-Map=$(MAP_FILE) \
+	-Wl,--print-memory-usage
 
 # ---------------------------------------------------------------------------- #
 #                                Build Rules                                   #
@@ -154,6 +157,7 @@ all: build
 build: $(OBJECTS) | $(BIN_DIR)
 	@echo
 	@echo -n "Building:   $(BIN_DIR)/$(TARGET).elf"
+	@echo
 	@$(LD) $(CFLAGS) $(LDFLAGS) $^ -o $(BIN_DIR)/$(TARGET).elf
 	@echo -e "\t[ok]"
 

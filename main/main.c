@@ -10,6 +10,10 @@ int main(void) {
 	os_init();
 
     init_LED();
+	while(1)
+	{
+		__NOP();
+	}
 
     while (1) {
         GPIOA->BSRR = GPIO_BSRR_BS5; // Turn on LED (set PA5 high)

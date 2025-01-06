@@ -135,9 +135,12 @@ LD := arm-none-eabi-gcc
 # Linker file
 LD_FILE := $(PRJ_NAME).ld
 
+MAP_FILE = $(BIN_DIR)/$(TARGET).map
+
 LDFLAGS := \
 	$(MCU) \
-	-T $(LD_FILE)
+	-T $(LD_FILE) \
+	-Wl,-Map=$(MAP_FILE)
 
 # ---------------------------------------------------------------------------- #
 #                                Build Rules                                   #

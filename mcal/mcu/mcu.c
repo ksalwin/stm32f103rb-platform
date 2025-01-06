@@ -35,4 +35,19 @@ void mcu_clock_init(void) {
 }
 
 void mcu_systick_init(void) {
+	// SysTick clock source: AHB/8 = 32/4 MHz = 4 MHz
+	CLEAR_BIT(SysTick->CTRL, SysTick_CTRL_CLKSOURCE_Msk);
+
+	// SysTick exception request (irq): en
+	//SET_BIT(SysTick->CTRL, SysTick_CTRL_TICKINT_Msk);
+
+	// Reload value: 4 MHz - 1 = 4 000 000 Hz - 1 := 1 ms
+	WRITE_REG(SysTick->LOAD, 4000000 - 1);
+
+	// Clear current value register
+	WRITE_REG(SysTick->VAL, 0);
+
+	// Enable SysTick
+	// - VAL loaded with RELOAD value and counts down
+	SET_BIT(SysTick->CTRL, SysTick_CTRL_ENABLE_Msk);
 }

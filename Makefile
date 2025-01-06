@@ -149,6 +149,7 @@ all: build
 
 # Rule to build and link all files into the final ELF executable
 build: $(OBJECTS) | $(BIN_DIR)
+	@echo
 	@echo -n "Building:   $(BIN_DIR)/$(TARGET).elf"
 	@$(LD) $(CFLAGS) $(LDFLAGS) $^ -o $(BIN_DIR)/$(TARGET).elf
 	@echo -e "\t[ok]"
@@ -186,7 +187,7 @@ $(OBJ_DIR):
 .PHONY: clean
 
 clean:
-	@echo "Rule: $@"
+	@echo "Cleaning:"
 	@echo -n "- Removing $(BIN_DIR) dir."
 	@rm -rf $(BIN_DIR)
 	@echo -e "\t[ok]"

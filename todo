@@ -1,2 +1,0 @@
-- systick_init nie ma sensu - jest zawsze wlaczony
-- enable systick irq

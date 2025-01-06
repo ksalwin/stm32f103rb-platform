@@ -138,7 +138,7 @@ LD_FILE := $(PRJ_NAME).ld
 MAP_FILE = $(BIN_DIR)/$(TARGET).map
 
 # -Map					: Generate map file
-# --print-memory-usage	: Print memory usage to map file
+# --print-memory-usage	: Print memory usage to console and map file
 LDFLAGS := \
 	$(MCU) \
 	-T $(LD_FILE) \

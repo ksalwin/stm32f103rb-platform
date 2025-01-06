@@ -54,3 +54,6 @@ dkms.conf
 
 # VIM swap file
 *.swp
+
+# todo file
+todo

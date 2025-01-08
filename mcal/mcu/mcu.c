@@ -1,6 +1,7 @@
 #include "mcu.h"
 #include "mcu_cfg.h"
 #include "stm32f1xx.h"
+#include "os.h"
 
 void mcu_clock_init(void) {
 	/***** Clock source *****/
@@ -59,17 +60,7 @@ void mcu_systick_init(void) {
 	// - VAL loaded with RELOAD value and counts down
 	SET_BIT(SysTick->CTRL, SysTick_CTRL_ENABLE_Msk);
 }
+
 void SysTick_Handler(void) {
-	static uint32_t delay = 0;
-
-	delay += 1;
-
-	if(delay == 500)
-		GPIOA->BSRR = GPIO_BSRR_BS5; // Turn on LED (set PA5 high)
-	if(delay == 1000)
-		GPIOA->BSRR = GPIO_BSRR_BR5; // Turn off LED (set PA5 low)
-
-	if(delay >= 1000)
-		delay = 0;
-	
+	os_tick();
 }

@@ -1,6 +1,6 @@
 #include "os_scheduler.h"
-#include "mcu.h"
 #include "tasks.h"
+#include "systick.h"
 
 void os_scheduler(void) {
 	uint32_t i;
@@ -19,5 +19,5 @@ void os_scheduler(void) {
 }
 
 void os_scheduler_start(void) {
-	mcu_systick_init();
+	systick_init();
 }

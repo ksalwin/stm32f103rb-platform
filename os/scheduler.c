@@ -2,7 +2,7 @@
 #include "tasks.h"
 #include "systick.h"
 
-void os_scheduler(void) {
+void scheduler(void) {
 	uint32_t i;
 
 	for(i = 0; i < task_count; i++)
@@ -18,6 +18,6 @@ void os_scheduler(void) {
 	}
 }
 
-void os_scheduler_start(void) {
+void scheduler_start(void) {
 	systick_init();
 }

@@ -1,7 +1,7 @@
-#ifndef OS_SCHEDULER_H
-#define OS_SCHEDULER_H
+#ifndef SCHEDULER_H
+#define SCHEDULER_H
 
-void os_scheduler(void);
-void os_scheduler_start(void);
+void scheduler(void);
+void scheduler_start(void);
 
 #endif

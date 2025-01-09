@@ -1,10 +1,9 @@
-#include "os_scheduler.h"
+#include "scheduler.h"
 #include "tasks.h"
 #include "systick.h"
 
 void os_scheduler(void) {
 	uint32_t i;
-
 
 	for(i = 0; i < task_count; i++)
 	{
@@ -14,7 +13,8 @@ void os_scheduler(void) {
 			task_list[i].offset_ms = task_list[i].period_ms;
 		}
 
-		task_list[i].offset_ms--;
+		if(task_list[i].offset_ms > 0)
+			task_list[i].offset_ms--;
 	}
 }
 

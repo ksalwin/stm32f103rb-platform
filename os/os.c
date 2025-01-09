@@ -1,16 +1,16 @@
 #include "os.h"
-#include "os_scheduler.h"
+#include "scheduler.h"
 
 static uint32_t	os_tick_cntr;
 
 void os_start(void) {
 	uint32_t os_tick_cntr_prev	= 0u;
 
-	os_scheduler_start();
+	scheduler_start();
 
 	while(1) {
 		if(os_tick_cntr_prev != os_tick_cntr) {
-			os_scheduler();
+			scheduler();
 			os_tick_cntr_prev = os_tick_cntr;
 		}
 	}

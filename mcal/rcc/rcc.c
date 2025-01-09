@@ -1,8 +1,8 @@
-#include "mcu.h"
-#include "mcu_cfg.h"
+#include "rcc.h"
+#include "rcc_cfg.h"
 #include "stm32f1xx.h"
 
-void mcu_clock_init(void) {
+void rcc_init(void) {
 	/***** Clock source *****/
 	// Enable HSI as clock source
 	SET_BIT(RCC->CR, RCC_CR_HSION);

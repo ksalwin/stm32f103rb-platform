@@ -1,6 +1,5 @@
 #include "gpio.h"
 #include "gpio_cfg.h"
-#include "stm32f1xx.h"
 
 #define GPIO_PINS_IN_CRL_REG	(8u)
 
@@ -32,4 +31,10 @@ void gpio_init(void) {
 		// Set mode
 		SET_BIT(*cfg_reg, (uint32_t) gpio_cfg[i].mode << pin_offset);
 	}
+}
+void gpio_pin_reset(GPIO_TypeDef *port, uint8_t pin) {
+	port->BSRR = 1 << pin;
+}
+void gpio_pin_set(GPIO_TypeDef *port, uint8_t pin) {
+	port->BRR = 1 << pin;
 }

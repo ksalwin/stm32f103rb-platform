@@ -2,17 +2,13 @@
 #include "rcc_cfg.h"
 #include "stm32f1xx.h"
 
+static void configure_clock_source(void);
+
 static void enable_gpioa_clk(void);
 
 void rcc_init(void) {
-	/***** Clock source *****/
-	// Enable HSI as clock source
-	SET_BIT(RCC->CR, RCC_CR_HSION);
-	// HSI = 8 MHz
-
-	// Wait for stable HSI
-	while(READ_BIT(RCC->CR, RCC_CR_HSIRDY) == 0);
-
+	configure_clock_source();
+	
 	/***** PLL cfg *****/
 	// PLL entry clock source: HSI/2
 	CLEAR_BIT(RCC->CFGR, RCC_CFGR_PLLSRC);
@@ -38,7 +34,16 @@ void rcc_init(void) {
 	enable_gpioa_clk();
 }
 
-/*** Statif functions ***/
+/*** Static functions ***/
+
+static void configure_clock_source(void) {
+	// Enable HSI as clock source
+	SET_BIT(RCC->CR, RCC_CR_HSION);
+	// HSI = 8 MHz
+
+	// Wait for stable HSI
+	while(READ_BIT(RCC->CR, RCC_CR_HSIRDY) == 0);
+}
 static void enable_gpioa_clk(void) {
 	SET_BIT(RCC->APB2ENR, RCC_APB2ENR_IOPAEN);
 }

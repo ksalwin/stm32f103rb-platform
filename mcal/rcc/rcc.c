@@ -2,14 +2,29 @@
 #include "rcc_cfg.h"
 #include "stm32f1xx.h"
 
+static void configure_clock_HCLK(void);
+static void configure_clock_pll(void);
 static void configure_clock_source(void);
 
-static void enable_gpioa_clk(void);
+static void enable_clock_gpioa(void);
 
 void rcc_init(void) {
 	configure_clock_source();
-	
-	/***** PLL cfg *****/
+
+	configure_clock_pll();
+
+	configure_clock_HCLK();
+
+	// Enable peripheral clocks
+	enable_clock_gpioa();
+}
+
+/*** Static functions ***/
+static void configure_clock_HCLK(void) {
+	CLEAR_BIT(RCC->CFGR, RCC_CFGR_HPRE);
+	// HCLK = 32 MHz
+}
+static void configure_clock_pll(void) {
 	// PLL entry clock source: HSI/2
 	CLEAR_BIT(RCC->CFGR, RCC_CFGR_PLLSRC);
 
@@ -25,17 +40,7 @@ void rcc_init(void) {
 
 	// Wait for PLL ready
 	while(READ_BIT(RCC->CR, RCC_CR_PLLRDY) == 0);
-
-	/***** HCLK/AHB prescaler  *****/
-	// Prescaler 1
-	CLEAR_BIT(RCC->CFGR, RCC_CFGR_HPRE);
-	// HCLK = 32 MHz
-
-	enable_gpioa_clk();
 }
-
-/*** Static functions ***/
-
 static void configure_clock_source(void) {
 	// Enable HSI as clock source
 	SET_BIT(RCC->CR, RCC_CR_HSION);
@@ -44,6 +49,6 @@ static void configure_clock_source(void) {
 	// Wait for stable HSI
 	while(READ_BIT(RCC->CR, RCC_CR_HSIRDY) == 0);
 }
-static void enable_gpioa_clk(void) {
+static void enable_clock_gpioa(void) {
 	SET_BIT(RCC->APB2ENR, RCC_APB2ENR_IOPAEN);
 }

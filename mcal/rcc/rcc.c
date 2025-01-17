@@ -2,6 +2,8 @@
 #include "rcc_cfg.h"
 #include "stm32f1xx.h"
 
+static void enable_gpioa_clk(void);
+
 void rcc_init(void) {
 	/***** Clock source *****/
 	// Enable HSI as clock source
@@ -32,4 +34,11 @@ void rcc_init(void) {
 	// Prescaler 1
 	CLEAR_BIT(RCC->CFGR, RCC_CFGR_HPRE);
 	// HCLK = 32 MHz
+
+	enable_gpioa_clk();
+}
+
+/*** Statif functions ***/
+static void enable_gpioa_clk(void) {
+	SET_BIT(RCC->APB2ENR, RCC_APB2ENR_IOPAEN);
 }
